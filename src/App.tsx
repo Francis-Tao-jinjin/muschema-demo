@@ -1,8 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { ProjectSchema, ResourceSchema, UserSchema } from "./muschemaUsage";
 
 function App() {
+  // now, create a new object base on Schema is really easy
+  const new_project = ProjectSchema.alloc();
+  new_project.spec.resourcesUrl.avatarImg = ResourceSchema.alloc();
+  new_project.spec.resourcesUrl.avatarImg.id = 1;
+  new_project.spec.resourcesUrl.avatarImg.url = "https://cvcvcxccsdsfdssdv";
+
+  const tempResource = ResourceSchema.alloc();
+  ResourceSchema.assign(tempResource, new_project.spec.resourcesUrl.avatarImg);
+  // please see the console log
+  console.log("new_project:", new_project);
+
+  const another_project = ProjectSchema.clone(new_project);
+  another_project.name = "project_2";
+  console.log("another_project:", another_project);
+
   return (
     <div className="App">
       <header className="App-header">
