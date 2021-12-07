@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import { MuReadStream, MuWriteStream } from "mudb/stream";
 import { ProjectSchema, ResourceSchema, UserSchema } from "./muschemaUsage";
 
 function App() {
@@ -18,6 +19,14 @@ function App() {
   const another_project = ProjectSchema.clone(new_project);
   another_project.name = "project_2";
   console.log("another_project:", another_project);
+
+  const diffOut = new MuWriteStream(1);
+  const diff = ProjectSchema.diff(new_project, another_project, diffOut);
+  console.log(diff, diffOut);
+
+  const inp = new MuReadStream(diffOut.buffer.uint8);
+  const temp_project = ProjectSchema.patch(new_project, inp);
+  console.log("temp_project", temp_project);
 
   return (
     <div className="App">
